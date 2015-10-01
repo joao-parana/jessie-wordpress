@@ -1,0 +1,8 @@
+alias git-override-and-update='git fetch --all ; git reset --hard origin/master'
+alias gph='git push -u origin master '
+alias h='history | grep -i  '
+alias www='python -m SimpleHTTPServer '
+alias sha256='openssl dgst -sha256 '
+alias dcc='docker-clean containers '
+alias dci='docker-clean images '
+
