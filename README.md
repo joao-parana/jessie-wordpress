@@ -1,8 +1,8 @@
 # jessie-wordpress
 
-> Imagem Docker para **Stack LAMP** usando Debian Jessie (version 8),
+> Imagem Docker para **Stack LAMP** com **Wordpress** usando Debian Jessie (version 8),
 > Apache WebServer, o MySQL 5.6.26, o PHP versão 5.6 (A versão 7 ainda 
-> não foi liberada) e o Wordpress
+> não foi liberada)
 
 Este projeto foi testado com a **versão 1.8.2** do Docker
 
@@ -11,6 +11,18 @@ Usado no curso [http://joao-parana.com.br/blog/curso-docker/](http://joao-parana
 Veja no Diagrama abaixo o contêiner, o Volume, e as portas do Apache e do SSH
 
 ![https://raw.githubusercontent.com/joao-parana/jessie-lamp/master/docs/img/jessie-lamp.png](https://raw.githubusercontent.com/joao-parana/jessie-lamp/master/docs/img/jessie-lamp.png)
+
+O Wordpress depende da Stack LAMP mas também possui uma estrutura que mistura 
+configuração, código PHP do núcleo, traduções, temas e plugins. Isto dificulta
+o uso de um Workflow para Desenvolvimento, Teste, Homologação e Produção.
+
+A figura abaixo ilustra estas dependências
+
+![dependencias wp](https://raw.githubusercontent.com/joao-parana/jessie-wordpress/master/docs/img/dependencias-wp.png)
+
+A solução proposta aqui é usar volumes e links simbólicos para facilitar 
+o trabalho. Obviamente poderiamos usar outra abordagem. Esta foi uma das 
+escolhas possíveis.
 
 Criando a imagem
 
