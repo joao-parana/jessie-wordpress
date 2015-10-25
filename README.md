@@ -24,6 +24,26 @@ A solução proposta aqui é usar volumes e links simbólicos para facilitar
 o trabalho. Obviamente poderiamos usar outra abordagem. Esta foi uma das 
 escolhas possíveis.
 
+Veja abaixo a proposta de estrutura de diretório para nosso projeto
+
+![estrutura de diretorio](https://raw.githubusercontent.com/joao-parana/jessie-wordpress/master/docs/img/estrutura-de-diretorio.png)
+
+## Configuração
+
+
+### PHP
+
+O arquivo `/usr/local/php/conf.d/uploads.ini` poderia ter um conteúdo 
+como este abaixo para permitir uploads de arquivos de até 256 Megabytes.
+
+    file_uploads = On
+    memory_limit = 256M
+    upload_max_filesize = 256M
+    post_max_size = 300M
+    max_execution_time = 600
+
+## Usando o Docker
+
 Criando a imagem
 
     docker build -t HUB-USER-NAME/jessie-wordpress  .
@@ -161,3 +181,10 @@ Da mesma forma, para verificar a configuração do PHP use:
 
 #### Mais detalhes sobre Docker no meu Blog: [http://joao-parana.com.br/blog/](http://joao-parana.com.br/blog/)
 
+## Resolução de Problemas
+
+### Migrando o Site
+
+Uma descrição completa de como funciona o processo de migração de site 
+no Wordpress pode ser encontrada neste link: 
+[Changing the site URL](https://codex.wordpress.org/Changing_The_Site_URL)

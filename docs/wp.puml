@@ -3,7 +3,7 @@
 class Wordpress << (W,#CCFF33) >>
 class themes << (D,gold) >>
 class plugins << (D,gold) >>
-class language << (D,gold) >>
+class languages << (D,gold) >>
 class "config-php"  << (A,#FFB2B2) >>
 Wordpress -> "config-php" : configuração
 note on link #D4FFE9: senhas e salts
@@ -22,12 +22,16 @@ note right on link #D4FFE9
   colocados aqui
 end note
 
-language <- Wordpress : traduções
+languages <- Wordpress : traduções
 note left on link #D4FFE9
   Traduções
   do CORE
   ficam aqui
 end note
+
+class uploads << (M,AliceBlue) >>
+Wordpress .up.> uploads
+
 hide members
 
 @enduml
