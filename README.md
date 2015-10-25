@@ -187,4 +187,7 @@ Da mesma forma, para verificar a configuração do PHP use:
 
 Uma descrição completa de como funciona o processo de migração de site 
 no Wordpress pode ser encontrada neste link: 
-[Changing the site URL](https://codex.wordpress.org/Changing_The_Site_URL)
+[Changing the site URL](https://codex.wordpress.org/Changing_The_Site_URL) 
+
+Se tiver problema para acessar este link veja o PDF gerado e disponível 
+[aqui no meu github](https://github.com/joao-parana/jessie-wordpress/blob/master/docs/ChangingTheSiteURL.pdf)
