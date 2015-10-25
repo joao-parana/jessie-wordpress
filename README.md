@@ -1,4 +1,4 @@
-# jessie-lamp
+# jessie-wordpress
 
 > Imagem Docker para **Stack LAMP** usando Debian Jessie (version 8),
 > Apache WebServer, o MySQL 5.6.26, o PHP versão 5.6 (A versão 7 ainda 
