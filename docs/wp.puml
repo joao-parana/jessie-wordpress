@@ -1,0 +1,33 @@
+@startuml
+
+class Wordpress << (W,#CCFF33) >>
+class themes << (D,gold) >>
+class plugins << (D,gold) >>
+class language << (D,gold) >>
+class "config-php"  << (A,#FFB2B2) >>
+Wordpress -> "config-php" : configuração
+note on link #D4FFE9: senhas e salts
+
+Wordpress --> themes : temas
+note right on link #D4FFE9
+  Todos os Temas
+  do site são
+  colocados aqui
+end note
+
+Wordpress --> plugins : plugins
+note right on link #D4FFE9
+  Todos os Plugins
+  do site são
+  colocados aqui
+end note
+
+language <- Wordpress : traduções
+note left on link #D4FFE9
+  Traduções
+  do CORE
+  ficam aqui
+end note
+hide members
+
+@enduml
