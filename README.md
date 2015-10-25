@@ -80,7 +80,7 @@ usar o Docker num Host com **MAC OSX** podemos fazer:
 
     ssh -p 2285 root@$(docker-ip)
 
-docker-ip é uma função criado no `.bash_profile` por conveniência. 
+`docker-ip` é uma função criada no `.bash_profile` por conveniência. 
 Veja o fonte abaixo:
 
     docker-ip() {

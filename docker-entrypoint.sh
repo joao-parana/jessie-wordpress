@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo ". . . . Contêiner JessieLAMP . . . ."
+echo ". . . . Contêiner JessieWordpress . . . ."
 echo "Você invocou com os seguintes parâmetros: $@"
 if [ "$1" = 'modules' ]; then
     echo "Veja abaixo a lista de Módulos PHP instalados"
@@ -22,8 +22,14 @@ if [ "$1" = 'start-apache-and-mysql' ]; then
 fi
 
 if [ "$1" = 'start-all' ]; then
-    echo "Iniciando Apache e MySQL"
+    echo "Iniciando Apache, MySQL e servidor SSH"
     /start-all
+    exit 0
+fi
+
+if [ "$1" = 'start-wordpress' ]; then
+    echo "Iniciando Apache, MySQL, servidor SSH e o Wordpress"
+    /start-wordpress
     exit 0
 fi
 
@@ -40,8 +46,10 @@ if [ "$1" = '--help' ]; then
     echo "       Para iniciar apenas o Apache WEB Server"
     echo "docker run --rm -i-t NOME-IMAGEM start-apache-and-mysql"
     echo "       Para iniciar o Apache WEB Server e o MySQL Server"
-    echo "docker run --rm -i-t NOME-IMAGEM start-all"
+    echo "docker run --rm -i-t NOME-IMAGEM start-all # Por compatibilidade retroativa"
     echo "       Para iniciar o Apache WEB Server, o MySQL Server e o Servidor SSH"
+    echo "docker run --rm -i-t NOME-IMAGEM start-wordpress"
+    echo "       Para iniciar o Apache WEB Server, o MySQL Server, o servidor SSH e o Wordpress"
     echo "docker run --rm -i-t NOME-IMAGEM /bin/bash"
     echo "       Para iniciar apenas uma shell bash - isto serve para investigar problemas"
     echo " "
@@ -52,6 +60,7 @@ if [ "$1" = '--help' ]; then
     echo "  • start-apache"
     echo "  • start-apache-and-mysql"
     echo "  • start-all"
+    echo "  • start-wordpress"
     echo " "
     exit 0
 fi
