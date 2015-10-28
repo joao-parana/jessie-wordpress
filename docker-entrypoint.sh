@@ -59,11 +59,13 @@ else
             --admin_user="admin" \
             --admin_password="minhasenha" \
             --admin_email="$WP_EMAIL_ADDR"
+    cat /var/www/html/wp-config.php
   fi
 fi
-cat /var/www/html/wp-config.html
+
 echo "••• `date` - Executável do WP_CLI"
 ls -lat "$WP_CLI_BINARY"
+echo "••• `date` - PHP_MEMORY_LIMIT = $PHP_MEMORY_LIMIT"
 
 echo ". . . . Contêiner JessieWordpress . . . ."
 echo "Você invocou com os seguintes parâmetros: $@"
@@ -109,5 +111,3 @@ if [ "$1" = '--help' ]; then
 fi
 
 echo ". . . . . . . . . . . . . . . . . . ."
-/start-apache
-
