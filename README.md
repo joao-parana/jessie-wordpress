@@ -1,7 +1,7 @@
 # jessie-wordpress
 
 > Imagem Docker para **Stack LAMP** com **Wordpress** usando Debian Jessie (version 8),
-> Apache WebServer, o MySQL 5.6.26, o PHP versão 5.6 (A versão 7 ainda 
+> Apache WebServer, o MySQL 5.6, o PHP versão 5.6 (A versão 7 ainda 
 > não foi liberada)
 
 Este projeto foi testado com a **versão 1.8.2** do Docker
@@ -28,7 +28,45 @@ Veja abaixo a proposta de estrutura de diretório para nosso projeto
 
 ![estrutura de diretorio](https://raw.githubusercontent.com/joao-parana/jessie-wordpress/master/docs/img/estrutura-de-diretorio.png)
 
-## Configuração
+## Instalação e Configuração
+
+### WP-CLI
+
+A CLI (Command Line Interface) wp permite realizar várias tarefas no Wordpress 
+de forma programática.
+
+Por exemplo, podemos fazer:
+
+* o download do Wordpress (comando `core download`)
+* a edição do wp-config.php (comando `core config`)
+* a configuração inicial do Wordpress (comando `core install`) 
+
+O comando `core download` não recebe nenhum parâmetro e baixa a ultima versão 
+estável do Wordpress.
+
+O comando `core config` recebe como parâmetros `dbname`, `dbuser`, `dbpass` e `dbhost`. 
+O dbhost deve ser especificado como `127.0.0.1` em vez de `localhost` que é o padrão.
+
+O comando `core install` recebe como parâmetros os dados do site: 
+`url`, `title`, `admin_user`, `admin_password` e `admin_email`. 
+
+Em certas circunstâncias necessitamos editar algum parâmetro no wp-config.php.
+
+Neste caso podemos criar uma função na nossa shell com o seguinte código:
+
+    set_config() {
+      key="$1"
+      value="$2"
+      php_escaped_value="$(php -r 'var_export($argv[1]);' "$value")"
+      sed_escaped_value="$(echo "$php_escaped_value" | sed 's/[\/&]/\\&/g')"
+      sed -ri "s/((['\"])$key\2\s*,\s*)(['\"]).*\3/\1$sed_escaped_value/" wp-config.php
+    }
+
+Isto permite invocá-la, por exemplo, assim:
+
+    set_config 'DB_HOST' "127.0.0.1"
+
+
 
 
 ### PHP
@@ -63,32 +101,92 @@ Em seguida podemos removê-lo
 
     docker rm web_wp
 
-Podemos executar o Contêiner iterativamente para obter um help assim:
+**ATENÇÃO:** Lembre-se que ao remover um contêiner você destroi o seu estado
+e isso inclui qualquer dado persistido em seu filesystem, então tome muito
+cuidado ao fazer isso. 
 
-    docker run --rm -i -t --name web_wp HUB-USER-NAME/jessie-wordpress
+Podemos executar o Contêiner iterativamente, forçando sua remoção ao sair. 
+Isso pode ser feito para obter um help das opções:
 
-Podemos tambem executar iterativamente assim:
+    docker run --rm -i -t HUB-USER-NAME/jessie-wordpress
 
-    docker run --rm -i -t --name web_wp \
-           -p 8085:80 -p 2285:22            \
+Quando não especificamos um nome para o contêiner o docker cria um nome arbitrário.
+
+Podemos executar iterativamente, como mostrado abaixo, mantendo o contêiner 
+nomeado `web_wp` com o Wordpress e o WP-CLI instalados e configurados. 
+
+    docker run -i -t --name web_wp -p 80:80 -p 2285:22 parana/jessie-wordpress
+
+Você poderá verificar que ele permanece na lista de contêineres no seu host.
+
+    docker ps -a
+
+Caso você **pare** (`docker stop web_wp`) o contêiner, também poderá 
+iniciar novamente a qualquer momento usando o comando :
+
+    docker start  web_wp
+
+Podemos verificar o LOG assim: 
+
+    docker logs  web_wp
+
+Veremos as mensagens indicando que na primeira vez o WP_CLI é instalado 
+e nas outras vezes apenas usado para ecoar as informações. 
+
+A nível de Banco de Dados MySQL são feitas as seguintes configurações iniciais
+no contêiner por padrão:
+
+* Criação de usuário __root__ com senha randômica 
+* Remoção do database __test__
+* Criação de database __my-db__
+* Criação de usuário __wp__ com senha __secret__
+* Grant de privilégios ao usuário __wp__  no database  __my-db__
+* Criação de tabela para _CRUDClass_ para teste de conexão ao database
+* Inserção de registros 'João', 'Pedro' e 'Maria' para teste de SQL
+
+## Executando o Wordpress
+
+Este projeto cria um site usando BASE_URL `dockerhost.local`, 
+título: `Título do SITE`, usuário: `admin`, senha: `minhasenha` e 
+e-mail de admin informado pela variável de ambiente `WP_EMAIL_ADDR`
+
+Assim, para facilitar os testes crie uma entrada no /etc/hosts do seu 
+computador host para `dockerhost.local` apontando da seguinte forma:
+
+* MAC OSX ou Windows : endereço obtido da execução de `boot2docker ip` 
+* Linux : localhost
+
+Podemos executar o conêiner iterativamente numa seção de teste passando um 
+diretório como Volume com o comando abaixo:
+
+    docker run --rm -i -t --name web_wp           \
+           -p 80:80 -p 2285:22                    \
+           -e ROOT_PASSWORD=xyz                   \
+           -e WP_EMAIL_ADDR=joao.parana@gmail.com \
+           -v ./test/site:/var/www/html           \
+           HUB-USER-NAME/jessie-wordpress start-wordpress
+
+A opção --rm remove o contêiner ao final de sua execução. Esta opção serve
+durante o processo de desenvolvimento do contêiner pelo mantenedor.
+Ela também serve para execução de testes unitários num workflow de 
+integração contínua, por exemplo.
+
+A variável de ambiente WP_EMAIL_ADDR precisa ser informada apenas na 
+primeira vez quando será feita a configuração do site Wordpress.
+
+Preferencialmente devemos executar no modo Daemon assim:
+
+    docker run -d --name web_wp             \
+           -p 80:80 -p 2285:22              \
            -e ROOT_PASSWORD=xyz             \
            -v ./test/site:/var/www/html     \
-           HUB-USER-NAME/jessie-wordpress start-all
-
-Ou preferencialmente no modo Daemon assim:
-
-    docker run -d --name web_wp         \
-           -p 8085:80 -p 2285:22            \
-           -e ROOT_PASSWORD=xyz             \
-           -v ./test/site:/var/www/html     \
-           HUB-USER-NAME/jessie-wordpress start-all
+           HUB-USER-NAME/jessie-wordpress start-wordpress
 
 Observe o mapeamento da porta 80 do Apache dentro do contêiner 
-para uso externo em 8085. O valor 8085 pode ser alterado a seu critério.
-Você pode inclusive usar a porta 80 se tiver direitos para isso e se 
-não estiver ocupada.
+para uso externo em 80. Antes verifique se a porta 80 já está ocupada 
+no seu computador host, pois isso causaria erro de rede.
 
-A porta 22 do SSH também foi mapeada e neste caso para 2285.
+A porta 22 do SSH foi mapeada para 2285.
 
 Também foi definido um diretório no host para ser montado 
 em /var/www/html
@@ -98,7 +196,7 @@ no computador Host usando as ferramentas visuais adequadas
 (IDE, Browser, etc) pois as mudanças refletem imediatamente no 
 Contêiner e são vistas pelo runtime do Apache e do PHP.
 
-Verificando o Log
+## Verificando o Log
 
     docker logs web_wp
 
@@ -106,6 +204,8 @@ Para ver apenas a password do usuário root que foi definida para
 uso via SSH use o comando abaixo:
 
     docker logs web_wp 2> /dev/null | grep  "senha de root"
+
+## Usando o SSH 
 
 Podemos então abrir uma sessão SSH com o contêiner. No caso de 
 usar o Docker num Host com **MAC OSX** podemos fazer:
@@ -150,11 +250,11 @@ Se você estiver usando o **MAC OSX** com Boot2Docker
 poderá executar o comando abaixo para abrir uma sessão como 
 root no MySQL:
 
-    open http://$(docker-ip):8085 
+    open http://$(docker-ip):80 
 
 No Linux (Ubuntu por exemplo) use assim:
 
-    open http://localhost:8085
+    open http://localhost:80
 
 A senha do MySQL para ser usada no programa PHP 
 está Hard-coded no arquivo run.sh, mas apenas 
@@ -162,9 +262,15 @@ por motivos didáticos.
 
 Veja a variável `MYSQL_ROOT_PASSWORD` na shell run.sh
 
+## Opções quando executar o Contêiner
+
+As opções de parâmetro para o ENTRYPOINT são:
+    --help            # opção padrão, quando não informada
+    /bin/bash         # para investigação e fazer debug do contêiner
+    start-wordpress   # workflow normal de desenvolvimento
+
 ## Diretórios importantes:
-    Configuração do Wordpress - /var/www/config
-    Documentos do site - /var/www/html/wp-content
+    Conteúdo Wordpress - /var/www/html/wp-content
     PHP.INI            - /usr/local/etc/php e /usr/local/etc/php/conf.d
     Extensões PHP      - /usr/src/php/ext
     Logs do Apache     - /var/log/apache2
@@ -189,5 +295,5 @@ Uma descrição completa de como funciona o processo de migração de site
 no Wordpress pode ser encontrada neste link: 
 [Changing the site URL](https://codex.wordpress.org/Changing_The_Site_URL) 
 
-Se tiver problema para acessar este link veja o PDF gerado e disponível 
+Se você tiver problema para acessar este link veja o PDF gerado e disponível 
 [aqui no meu github](https://github.com/joao-parana/jessie-wordpress/blob/master/docs/ChangingTheSiteURL.pdf)

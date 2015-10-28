@@ -16,6 +16,8 @@ ENV REFRESHED_AT 2015-10-23
 #    All binaries, libraries, headers, etc., are under /usr
 #    The data directory is under /var
 
+ENV WP_INSTALLED **None**
+
 # Usaremos uma shell específica no Entrypoint sobreescrevendo a herdada
 COPY ./docker-entrypoint.sh /
 RUN chmod a+rx /docker-entrypoint.sh

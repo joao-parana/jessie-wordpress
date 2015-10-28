@@ -2,7 +2,7 @@
 set -e
 
 if [ "${AUTHORIZED_KEYS}" != "**None**" ]; then
-  echo "=> Found authorized keys"
+  echo "=> start-wordpress - Found authorized keys"
   mkdir -p /root/.ssh
   chmod 700 /root/.ssh
   touch /root/.ssh/authorized_keys
@@ -14,31 +14,31 @@ if [ "${AUTHORIZED_KEYS}" != "**None**" ]; then
     x=$(echo $x |sed -e 's/^ *//' -e 's/ *$//')
     cat /root/.ssh/authorized_keys | grep "$x" >/dev/null 2>&1
     if [ $? -ne 0 ]; then
-      echo "••• `date` - => Adding public key to /root/.ssh/authorized_keys: $x"
+      echo "••• `date` - => start-wordpress - Adding public key to /root/.ssh/authorized_keys: $x"
       echo "$x" >> /root/.ssh/authorized_keys
     fi
   done
 fi
 
 if [ ! -f /.root_pw_set ]; then
-  echo "••• `date` - Estabelecendo a senha de root para o SSH "
+  echo "••• `date` - start-wordpress - Estabelecendo a senha de root para o SSH "
   /set_root_pw.sh "$ROOT_PASSWORD"
 fi
 
 if [ -f /.root_pw_set ]; then
-  echo "••• `date` - Senha de root para o SSH já foi definida"
+  echo "••• `date` - start-wordpress - Senha de root para o SSH já foi definida"
 fi
 
-echo "••• `date` - - - - - - Iniciando o SSH Server - - - - - - - - - "
+echo "••• `date` - - - - - - start-wordpress - Iniciando o SSH Server - - - - - - - - - "
 /usr/sbin/sshd -D &
-echo "••• `date` - - - - - - SSH Server Iniciado  - - - - - - - - "
+echo "••• `date` - - - - - - start-wordpress - SSH Server Iniciado  - - - - - - - - "
 
-echo "••• `date` - MySQL vai iniciar "
+echo "••• `date` - start-wordpress - MySQL vai iniciar "
 /run-mysql.bash
 
 # O Apache não se comporta muito bem com arquivos PID de sessões anteriores
 rm -f /var/run/apache2/apache2.pid
 
-echo "••• `date` - Apache vai iniciar "
+echo "••• `date` - start-wordpress - Apache vai iniciar "
 /usr/local/bin/apache2-foreground
-echo "••• `date` - Apache terminou "
+echo "••• `date` - start-wordpress - Apache terminou "

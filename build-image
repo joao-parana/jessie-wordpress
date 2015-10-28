@@ -1,1 +1,1 @@
-docker build -t parana/jessie-lamp  .
+docker build -t parana/jessie-wordpress  .
