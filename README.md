@@ -297,3 +297,53 @@ no Wordpress pode ser encontrada neste link:
 
 Se você tiver problema para acessar este link veja o PDF gerado e disponível 
 [aqui no meu github](https://github.com/joao-parana/jessie-wordpress/blob/master/docs/ChangingTheSiteURL.pdf)
+
+#### Alterando WP_HOME e WP_SITEURL no arquivo wp-config.php
+
+Podemos resumir assim:
+
+Quando você encontra um problema durante a migração de um site de um 
+endereço URL para outro, você pode usar uma sessão SSH e editar o `wp-config.php` 
+adicionando/alterando as linhas abaixo:
+
+    define('WP_HOME','http://yourdomainname.com.br');
+    define('WP_SITEURL','http://yourdomainname.com.br');
+
+#### Alterando RELOCATE no arquivo wp-config.php
+
+Outra alternativa é alterar o valor de `RELOCATE` para `true` no `wp-config.php`
+
+    define('RELOCATE', true);
+
+e em seguida usar a URL: `http://yourdomainname.com.br/wp-login.php` para 
+entrar no Site como Admin. Em seguida navegue para Settings > General e 
+verifique as URLs para a HOME e para SITEURL. Salve as configurações 
+e mude novamente o valor de RELOCATE no arquivo `wp-config.php`, mas 
+agora para false.
+
+    define('RELOCATE', false);
+
+Observação: Quando o flag RELOCATE fica com true, o Site URL será atualizado
+automaticamente pelo caminho que estivermos usando para acessar a tela de login.
+Isto deixa a a seção de administração rodando na nova URL, permitindo
+que façamos as alterações necessárias que devem ser salvas para o site voltar 
+a funcionar plenamente.
+
+#### Usando WP_CLI
+
+Mais uma alternativa, agora usando WP_CLI
+
+Como o nosso site de desenvolvimento está em `dockerhost.local` devemos fazer o seguinte:
+
+    wp search-replace 'dockerhost.local' 'yourdomainname.com.br' --skip-columns=guid
+
+Se desejarmos apenas mudar o valor de `option` podemos fazer o seguinte:
+
+    wp option update home 'http://yourdomainname.com.br'
+    wp option update siteurl 'http://yourdomainname.com.br'
+
+ou, se desejar usar HTTPS: 
+
+    wp option update home 'https://yourdomainname.com.br'
+    wp option update siteurl 'https://yourdomainname.com.br'
+

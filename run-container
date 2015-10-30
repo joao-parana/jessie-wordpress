@@ -8,6 +8,7 @@ if [ "$1" == "delete-first" ]; then
   docker rm web_wp 2> /dev/null
   echo "•• Removendo o site do VOLUME"
   rm -rf site/* 2> /dev/null
+  git checkout -- site/README.md
 fi
 
 # docker run --rm -i -t --name web_wp -p 80:80 -p 2285:22 parana/jessie-wordpress
@@ -22,7 +23,7 @@ docker run -d --name web_wp \
 echo Contêiner web_wp iniciado com WEB na porta 80 e ssh na porta 2285
 echo "Use:  open http://`boot2docker ip`:80 para testar"
 echo "docker logs web_wp 2> /dev/null | grep  \"senha de root\" "
-echo "ssh -p 2285 root@`docker-ip`"
+# ssh -p 2285 root@$(docker-ip)
 echo "Aguardando 40 segundos ..."
 sleep 40
 echo "Testando o suporte a PHP ..."
