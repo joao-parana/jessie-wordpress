@@ -176,10 +176,11 @@ primeira vez quando será feita a configuração do site Wordpress.
 
 Preferencialmente devemos executar no modo Daemon assim:
 
-    docker run -d --name web_wp             \
-           -p 80:80 -p 2285:22              \
-           -e ROOT_PASSWORD=xyz             \
-           -v ./test/site:/var/www/html     \
+    docker run -d --name web_wp                   \
+           -p 80:80 -p 2285:22                    \
+           -e ROOT_PASSWORD=xyz                   \
+           -e WP_EMAIL_ADDR=joao.parana@gmail.com \
+           -v ./test/site:/var/www/html           \
            HUB-USER-NAME/jessie-wordpress start-wordpress
 
 Observe o mapeamento da porta 80 do Apache dentro do contêiner 
