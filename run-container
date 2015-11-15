@@ -6,9 +6,9 @@ if [ "$1" == "delete-first" ]; then
   docker stop web_wp  2> /dev/null
   echo "•• Removendo o contêiner"
   docker rm web_wp 2> /dev/null
-  echo "•• Removendo o site do VOLUME"
-  rm -rf site/* 2> /dev/null
-  git checkout -- site/README.md
+  echo "•• Removendo o site do VOLUME. Ficará apenas o arquivo README.md"
+  rm -rf site/[a-z]* 2> /dev/null
+  # git checkout -- site/README.md
 fi
 
 # docker run --rm -i -t --name web_wp -p 80:80 -p 2285:22 parana/jessie-wordpress

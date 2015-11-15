@@ -348,3 +348,9 @@ ou, se desejar usar HTTPS:
     wp option update home 'https://yourdomainname.com.br'
     wp option update siteurl 'https://yourdomainname.com.br'
 
+
+## Configuração de SMTP 
+
+[https://wordpress.org/plugins/hectane/](https://wordpress.org/plugins/hectane/)
+
+

@@ -30,6 +30,8 @@ echo "••• `date` - WP_CLI_DIR : $WP_CLI_DIR | WP_CLI_BINARY : $WP_CLI_BINA
 if [ -f "$WP_CLI_BINARY" ]; then
   echo "••• `date` - WP_CLI já está instalado em $WP_CLI_DIR"
   WP_INSTALLED=true
+  echo "••• `date` - Iniciando o Servidor MySQL"
+  /run-mysql.bash
 else
   echo "••• `date` - Instalando WP_CLI no diretório $WP_CLI_DIR"
   curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
@@ -82,7 +84,7 @@ if [ "$1" = '/bin/bash' ]; then
 fi
 
 if [ "$1" = 'start-wordpress' ]; then
-    echo "••• `date` - Iniciando Apache, MySQL, servidor SSH e o Wordpress"
+    echo "••• `date` - Iniciando o WebServer Apache, o servidor SSH e o Wordpress"
     /start-wordpress
     exit 0
 fi
