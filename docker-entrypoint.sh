@@ -18,6 +18,18 @@ WP_INSTALLED=false
 WP_CLI_DIR=/usr/local/bin
 WP_CLI_BINARY="$WP_CLI_DIR/wp"
 
+#
+# Uma abordagem alternativa ao uso da função set_config() abaixo é
+# Usar um arquivo wp-config.php ajustado para acessar variáveis de
+# ambiente como mostrado no exemplo abaixo
+# define('DB_NAME', getenv('DB_NAME'));
+# define('DB_USER', getenv('DB_USER'));
+# define('DB_PASSWORD', getenv('DB_PASSWORD'));
+# Assumindo que o MySQL está em outro contêiner poderiamos usar assim:
+# define('DB_HOST', getenv('DB_1_PORT_3306_TCP_ADDR') .
+#                   ":" . getenv('DB_1_PORT_3306_TCP_PORT'));
+#
+
 set_config() {
   key="$1"
   value="$2"
