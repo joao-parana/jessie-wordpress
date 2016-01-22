@@ -159,12 +159,13 @@ computador host para `dockerhost.local` apontando da seguinte forma:
 Podemos executar o conêiner iterativamente numa seção de teste passando um 
 diretório como Volume com o comando abaixo:
 
+    HUB_USER_NAME=parana
     docker run --rm -i -t --name web_wp           \
            -p 80:80 -p 2285:22                    \
            -e ROOT_PASSWORD=xyz                   \
            -e WP_EMAIL_ADDR=joao.parana@gmail.com \
-           -v ./test/site:/var/www/html           \
-           HUB-USER-NAME/jessie-wordpress start-wordpress
+           -v $PWD/test/site:/var/www/html           \
+           $HUB_USER_NAME/jessie-wordpress start-wordpress
 
 A opção --rm remove o contêiner ao final de sua execução. Esta opção serve
 durante o processo de desenvolvimento do contêiner pelo mantenedor.
@@ -180,8 +181,8 @@ Preferencialmente devemos executar no modo Daemon assim:
            -p 80:80 -p 2285:22                    \
            -e ROOT_PASSWORD=xyz                   \
            -e WP_EMAIL_ADDR=joao.parana@gmail.com \
-           -v ./test/site:/var/www/html           \
-           HUB-USER-NAME/jessie-wordpress start-wordpress
+           -v $PWD/test/site:/var/www/html           \
+           $HUB_USER_NAME/jessie-wordpress start-wordpress
 
 Observe o mapeamento da porta 80 do Apache dentro do contêiner 
 para uso externo em 80. Antes verifique se a porta 80 já está ocupada 

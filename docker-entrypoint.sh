@@ -18,6 +18,29 @@ WP_INSTALLED=false
 WP_CLI_DIR=/usr/local/bin
 WP_CLI_BINARY="$WP_CLI_DIR/wp"
 
+if [ "$1" = '--help' ]; then
+    echo " "
+    echo " "
+    echo "Você pode invocar este Contêiner em 6 modos diferentes:"
+    echo " "
+    echo "docker run --rm -i-t NOME-IMAGEM --help"
+    echo "       Para ver esta mensagem"
+    echo "docker run --rm -i-t NOME-IMAGEM modules"
+    echo "       Para ver a lista de módulos PHP disponíveis em runtime"
+    echo "docker run --rm -i-t NOME-IMAGEM start-wordpress"
+    echo "       Para iniciar o Apache WEB Server, o MySQL Server, o servidor SSH e o Wordpress"
+    echo "docker run --rm -i-t NOME-IMAGEM /bin/bash"
+    echo "       Para iniciar apenas uma shell bash - isto serve para investigar problemas"
+    echo " "
+    echo "Observação:"
+    echo "  Você poderá substituir as opções '--rm -i-t' pela opção '-d' "
+    echo "  Isso fará com que o conteiner rode como Daemon. "
+    echo "  Mas isso só faz sentido para o caso da opção  "
+    echo "  • start-wordpress"
+    echo " "
+    exit 0
+fi
+
 #
 # Uma abordagem alternativa ao uso da função set_config() abaixo é
 # Usar um arquivo wp-config.php ajustado para acessar variáveis de
@@ -98,29 +121,6 @@ fi
 if [ "$1" = 'start-wordpress' ]; then
     echo "••• `date` - Iniciando o WebServer Apache, o servidor SSH e o Wordpress"
     /start-wordpress
-    exit 0
-fi
-
-if [ "$1" = '--help' ]; then
-    echo " "
-    echo " "
-    echo "Você pode invocar este Contêiner em 6 modos diferentes:"
-    echo " "
-    echo "docker run --rm -i-t NOME-IMAGEM --help"
-    echo "       Para ver esta mensagem"
-    echo "docker run --rm -i-t NOME-IMAGEM modules"
-    echo "       Para ver a lista de módulos PHP disponíveis em runtime"
-    echo "docker run --rm -i-t NOME-IMAGEM start-wordpress"
-    echo "       Para iniciar o Apache WEB Server, o MySQL Server, o servidor SSH e o Wordpress"
-    echo "docker run --rm -i-t NOME-IMAGEM /bin/bash"
-    echo "       Para iniciar apenas uma shell bash - isto serve para investigar problemas"
-    echo " "
-    echo "Observação:"
-    echo "  Você poderá substituir as opções '--rm -i-t' pela opção '-d' "
-    echo "  Isso fará com que o conteiner rode como Daemon. "
-    echo "  Mas isso só faz sentido para o caso da opção  "
-    echo "  • start-wordpress"
-    echo " "
     exit 0
 fi
 

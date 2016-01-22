@@ -7,7 +7,7 @@ FROM parana/jessie-lamp
 #
 MAINTAINER João Antonio Ferreira "joao.parana@gmail.com"
 
-ENV REFRESHED_AT 2015-10-23
+ENV REFRESHED_AT 2016-01-21
 
 # WORKDIR /var/www/html
 

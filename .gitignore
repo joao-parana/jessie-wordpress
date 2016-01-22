@@ -1,2 +1,7 @@
 tema-epico.tar.gz
 site/[a-z]*
+test/site/index.php
+test/site/license.txt
+test/site/readme.html
+test/site/wp-*
+test/site/xmlrpc.php
